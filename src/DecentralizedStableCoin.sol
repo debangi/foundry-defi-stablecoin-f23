@@ -2,6 +2,8 @@
 pragma solidity ^0.8.18;
 
 import {ERC20Burnable, ERC20} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+// We want this token to be 100% controlled by the logic so we are gonna make this ownable
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 /*
  * @title DecentralizedStableCoin
@@ -15,6 +17,20 @@ import {ERC20Burnable, ERC20} from "@openzeppelin/contracts/token/ERC20/extensio
  *
  */
 
-contract DecentralizedStableCoin {
-    constructor() {}
+contract DecentralizedStableCoin is ERC20Burnable, Ownable {
+    error DecentralizedStableCoin__MustBeMoreThanZero();
+    error DecentralizedStableCoin__BurnAmountExceedsBalance();
+
+    constructor() ERC20("DecentralizedStableCoin", "DSC") Ownable(msg.sender) {}
+
+    function burn(uint256 _amount) public override onlyOwner {
+        uint256 balance = balanceOf(msg.sender);
+        if (_amount <= 0) {
+            revert DecentralizedStableCoin__MustBeMoreThanZero();
+        }
+        if (balance < _amount) {
+            revert DecentralizedStableCoin__BurnAmountExceedsBalance();
+        }
+        super.burn(_amount);
+    }
 }
