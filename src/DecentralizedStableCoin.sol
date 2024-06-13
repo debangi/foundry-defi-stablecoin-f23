@@ -5,7 +5,7 @@ import {ERC20Burnable, ERC20} from "@openzeppelin/contracts/token/ERC20/extensio
 // We want this token to be 100% controlled by the logic so we are gonna make this ownable
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-/*
+/**
  * @title DecentralizedStableCoin
  * @author Debangi
  * Collateral: Exogenous (ETH & BTC)
