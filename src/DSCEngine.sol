@@ -31,12 +31,12 @@ contract DSCEngine is ReentrancyGuard {
     ///////////////
     error DSCEngine__NeedsMoreThanZero();
     error DSCEngine__tokenAddressesAndPriceFeedAddressesMustBeSameLength();
-    error DSCEngine__TokenNotAllowed(address token);
+    error DSCEngine__TokenNotAllowed();
     error DSCEngine__TransferFailed();
     error DSCEngine__BreaksHealthFactor(uint256 healthFactor);
     error DSCEngine__MintFailed();
     error DSCEngine__HealthFactorOK();
-    error DSCEngine_HealthFactorNotImproved();
+    error DSCEngine__HealthFactorNotImproved();
 
     /////////////////////
     // State Variables //
@@ -75,7 +75,7 @@ contract DSCEngine is ReentrancyGuard {
 
     modifier isAllowedToken(address token) {
         if (s_priceFeeds[token] == address(0)) {
-            revert DSCEngine__TokenNotAllowed(token);
+            revert DSCEngine__TokenNotAllowed();
         }
         _;
     }
@@ -220,7 +220,7 @@ contract DSCEngine is ReentrancyGuard {
         _burnDSC(debtToCover, user, msg.sender);
         uint256 endingUserHealthFactor = _healthFactor(user);
         if (endingUserHealthFactor <= startingUserHeathFactor) {
-            revert DSCEngine_HealthFactorNotImproved();
+            revert DSCEngine__HealthFactorNotImproved();
         }
         _revertIfHealthFactorIsBroken(msg.sender);
     }
