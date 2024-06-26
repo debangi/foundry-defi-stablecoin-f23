@@ -84,4 +84,6 @@ contract DSCEngineTest is Test {
         dsce.depositCollateral(address(ranToken), AMOUNT_COLLATERAL);
         vm.stopPrank();
     }
+
+    function testCanDepositCollateralAndGetAccountInfo
 }
